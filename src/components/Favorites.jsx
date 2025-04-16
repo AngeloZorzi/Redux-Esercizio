@@ -1,12 +1,14 @@
-import { useSelector } from "react-redux";
-import { Container, Row, Col } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { removeFavourite } from "../redux/reducer/index";
 
 const Favourites = () => {
   const favourites = useSelector((state) => state.favourites.companies);
+  const dispatch = useDispatch();
 
   return (
-    <Container>
+    <Container fluid>
       <Row>
         <Col className="my-3">
           <h1 className="display-4">Aziende Preferite</h1>
@@ -14,12 +16,23 @@ const Favourites = () => {
             <p>Nessuna azienda nei preferiti.</p>
           ) : (
             favourites.map((company) => (
-              <div
+              <Row
                 key={company}
-                style={{ padding: "10px 0", borderBottom: "1px solid #ccc" }}
+                className="align-items-center my-2 p-2"
+                style={{ border: "1px solid #ccc", borderRadius: 4 }}
               >
-                <Link to={`/${company}`}>{company}</Link>
-              </div>
+                <Col xs={8}>
+                  <Link to={`/${company}`}>{company}</Link>
+                </Col>
+                <Col xs={4} className="text-end">
+                  <Button
+                    variant="danger"
+                    onClick={() => dispatch(removeFavourite(company))}
+                  >
+                    Rimuovi dai preferiti
+                  </Button>
+                </Col>
+              </Row>
             ))
           )}
         </Col>
